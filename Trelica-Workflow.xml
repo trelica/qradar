@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+Trelica
+https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
+
+-->
+<Workflow name="Trelica" version="1.0" xmlns="http://qradar.ibm.com/UniversalCloudRESTAPI/Workflow/V1">
+
+    <Parameters>
+        <Parameter name="host" label="Host" description="The base URL" required="true" default="app.trelica.com" />
+        <Parameter name="client_id" label="Client ID" description="The Client ID" required="true" />
+        <Parameter name="client_secret" label="Client Secret" description="The Client Secret" required="true" secret="true" />
+    </Parameters>
+
+    <Actions>
+		<!--Initialize path="/initial_poll_epoch" value="${time() - (7 * 24 * 60 * 60 * 1000)}" />
+		<FormatDate pattern="yyyy-MM-ddTHH:mm:ssZ" time="${/initial_poll_epoch}" timeZone="UTC" savePath="/initial_poll_date" /-->
+
+        <!--
+        //////////////////////
+        // Get Access Token //
+        //////////////////////
+        -->
+
+        <CallEndpoint url="https://${/host}/connect/token" method="POST" savePath="/get_access_token">
+            <BasicAuthentication username="${/client_id}" password="${/client_secret}" />
+            <RequestBody type="application/json" encoding="UTF-8">{ "grant_type": "client_credentials" }</RequestBody>
+        </CallEndpoint>
+
+        <!-- Handle Errors -->
+        <If condition="/get_access_token/status_code != 200">
+            <Abort reason="${/get_access_token/status_code}: ${/get_access_token/body/error}" />
+        </If>
+
+        <!-- Extract the Access Token -->
+        <Set path="/access_token" value="${/get_access_token/body/access_token}" />
+
+
+        <!--
+        ////////////////
+        // Get Events //
+        ////////////////
+        -->
+        <!-- Initialize the Bookmark -->
+        <Initialize path="/bookmark" value="https://${/host}/api/audit/v1/logs" />
+
+
+        <CallEndpoint url="${/bookmark}" method="GET" savePath="/get_logs">
+            <BearerAuthentication token="${/access_token}" />
+            <RequestHeader name="Accept" value="application/json" />
+            <RequestHeader name="Content-type" value="application/json" />
+            <QueryParameter name="limit" value="1000" />
+        </CallEndpoint>
+
+        <!-- Handle Errors -->
+        <If condition="/get_logs/status_code != 200">
+            <Abort reason="${/get_logs/status_code}: ${/get_logs/body/title}" />
+        </If>
+
+        <!-- Post Events -->
+        <PostEvents path="/get_logs/body/results" source="${/host}" />
+
+        <!-- Update the Bookmark -->
+        <Set path="/bookmark" value="${/get_logs/body/next}" />
+
+    </Actions>
+
+    <Tests>
+        <DNSResolutionTest host="${/host}" />
+        <TCPConnectionTest host="${/host}" />
+        <SSLHandshakeTest host="${/host}" />
+        <HTTPConnectionThroughProxyTest url="https://${/host}" />
+    </Tests>
+
+</Workflow>
