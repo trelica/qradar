@@ -4,7 +4,7 @@ You can create an API client in Trelica by going to **Admin** > **Settings** > *
 
 Use client credentials, and ensure the `Audit log` scope is selected for the client.
 
-Please review [https://help.trelica.com/hc/en-us/articles/7739284192413-Creating-an-app](this article) for more information.
+Please review [this article](https://help.trelica.com/hc/en-us/articles/7739284192413-Creating-an-app) for more information.
 
 ## QRadar Log Source Configuration
 
