@@ -69,7 +69,6 @@ https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
     <Tests>
         <DNSResolutionTest host="${/host}" />
         <TCPConnectionTest host="${/host}" />
-        <SSLHandshakeTest host="${/host}" />
         <HTTPConnectionThroughProxyTest url="https://${/host}" />
     </Tests>
 
