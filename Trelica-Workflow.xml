@@ -24,8 +24,8 @@ https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
         -->
 
         <CallEndpoint url="https://${/host}/connect/token" method="POST" savePath="/get_access_token">
-        <RequestHeader name="Content-Type" value="application/x-www-form-urlencoded" />
             <BasicAuthentication username="${/client_id}" password="${/client_secret}" />
+            <RequestHeader name="Content-Type" value="application/x-www-form-urlencoded" />
             <UrlEncodedFormRequestBody>
                 <Parameter name="grant_type" value="client_credentials" />
             </UrlEncodedFormRequestBody>
