@@ -14,8 +14,8 @@ https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
     </Parameters>
 
     <Actions>
-		<!--Initialize path="/initial_poll_epoch" value="${time() - (7 * 24 * 60 * 60 * 1000)}" />
-		<FormatDate pattern="yyyy-MM-ddTHH:mm:ssZ" time="${/initial_poll_epoch}" timeZone="UTC" savePath="/initial_poll_date" /-->
+        <!--Initialize path="/initial_poll_epoch" value="${time() - (7 * 24 * 60 * 60 * 1000)}" />
+        <FormatDate pattern="yyyy-MM-ddTHH:mm:ssZ" time="${/initial_poll_epoch}" timeZone="UTC" savePath="/initial_poll_date" /-->
 
         <!--
         //////////////////////
@@ -24,10 +24,10 @@ https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
         -->
 
         <CallEndpoint url="https://${/host}/connect/token" method="POST" savePath="/get_access_token">
-	    <RequestHeader name="Content-Type" value="application/x-www-form-urlencoded" />
+        <RequestHeader name="Content-Type" value="application/x-www-form-urlencoded" />
             <BasicAuthentication username="${/client_id}" password="${/client_secret}" />
-	    <UrlEncodedFormRequestBody>
-	        <Parameter name="grant_type" value="client_credentials" />
+            <UrlEncodedFormRequestBody>
+                <Parameter name="grant_type" value="client_credentials" />
             </UrlEncodedFormRequestBody>
         </CallEndpoint>
 
