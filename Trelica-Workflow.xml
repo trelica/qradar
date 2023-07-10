@@ -46,12 +46,11 @@ https://help.trelica.com/hc/en-us/articles/7739283478941-Trelica-API
         ////////////////
         -->
         <!-- Initialize the Bookmark -->
-        <Initialize path="/bookmark" value="https://${/host}/api/audit/v1/logs" />
+        <Initialize path="/bookmark" value="https://${/host}/api/audit/v1/logs?limit=1000" />
 
 
         <CallEndpoint url="${/bookmark}" method="GET" savePath="/get_logs">
             <BearerAuthentication token="${/access_token}" />
-            <QueryParameter name="limit" value="1000" />
             <RequestHeader name="Accept" value="application/json" />
             <RequestHeader name="Content-type" value="application/json" />
         </CallEndpoint>
